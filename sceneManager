@@ -1,0 +1,27 @@
+#include "SceneManager.h"
+#include "TitleScene.h"
+#include "GameScene.h"
+#include "ResultScene.h"
+
+SceneManager::SceneManager() : currentScene(nullptr), currentType(SceneType::Title) {
+    ChangeScene(SceneType::Title);
+}
+SceneManager::~SceneManager() {
+    if (currentScene) { currentScene->End(); delete currentScene; }
+}
+void SceneManager::ChangeScene(SceneType type) {
+    if (currentScene) { currentScene->End(); delete currentScene; }
+    currentType = type;
+    switch (type) {
+    case SceneType::Title:  currentScene = new TitleScene(); break;
+    case SceneType::Game:   currentScene = new GameScene();  break;
+    case SceneType::Result: currentScene = new ResultScene(); break;
+    }
+    currentScene->Init();
+}
+void SceneManager::Update(float delta_time) {
+    if (currentScene) currentScene->Update(delta_time);
+}
+void SceneManager::Draw() const {
+    if (currentScene) currentScene->Draw();
+}
