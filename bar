@@ -1,0 +1,28 @@
+#include "Bar.h"
+#include "../dxe/dxe.h"
+
+Bar::Bar() : x(0), y(0), w(80), h(16), speed(300.0f) {}
+
+void Bar::Init(float px, float py) {
+    x = px; y = py;
+}
+
+void Bar::Update(float delta_time) {
+    if (CheckHitKey(KEY_INPUT_LEFT)) {
+        x -= speed * delta_time;
+        if (x < 0) x = 0;
+    }
+    if (CheckHitKey(KEY_INPUT_RIGHT)) {
+        x += speed * delta_time;
+        if (x + w > DXE_WINDOW_WIDTH) x = DXE_WINDOW_WIDTH - w;
+    }
+}
+
+void Bar::Draw() const {
+    DrawBox(x, y, x + w, y + h, GetColor(100, 200, 255), TRUE);
+}
+
+float Bar::GetX() const { return x; }
+float Bar::GetY() const { return y; }
+float Bar::GetW() const { return w; }
+float Bar::GetH() const { return h; }
