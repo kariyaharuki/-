@@ -1,0 +1,63 @@
+#include "Block.h"
+#include "../dxe/dxe.h"
+
+// std::min, std::maxのかわりに初心者向けに自作関数
+float min_float(float a, float b) {
+    return (a < b) ? a : b;
+}
+
+float max_float(float a, float b) {
+    return (a > b) ? a : b;
+}
+
+Block::Block(float x, float y, float w, float h)
+    : x(x), y(y), w(w), h(h), alive(true) {
+}
+
+void Block::Draw() const {
+    if (alive) {
+        DrawBox(x, y, x + w, y + h, GetColor(255, 200, 50), TRUE);
+    }
+}
+
+bool Block::IsHit(float ball_x, float ball_y, float ball_r) {
+    if (!alive) return false;
+    // 当たり判定（矩形と円）
+    float closestX, closestY;
+    // x方向の最近点
+    if (ball_x < x) {
+        closestX = x;
+    }
+    else if (ball_x > x + w) {
+        closestX = x + w;
+    }
+    else {
+        closestX = ball_x;
+    }
+    // y方向の最近点
+    if (ball_y < y) {
+        closestY = y;
+    }
+    else if (ball_y > y + h) {
+        closestY = y + h;
+    }
+    else {
+        closestY = ball_y;
+    }
+    float dx = ball_x - closestX;
+    float dy = ball_y - closestY;
+    if ((dx * dx + dy * dy) < (ball_r * ball_r)) {
+        // ブロックを消す（aliveをfalseにする）
+        Destroy();
+        return true;
+    }
+    return false;
+}
+
+bool Block::IsAlive() const {
+    return alive;
+}
+
+void Block::Destroy() {
+    alive = false;
+}
