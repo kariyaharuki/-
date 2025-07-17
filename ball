@@ -1,0 +1,39 @@
+#include "Ball.h"
+#include "../dxe/dxe.h"
+
+Ball::Ball() : x(0), y(0), vx(0), vy(0), r(8.0f) {}
+
+void Ball::Init(float px, float py) {
+    x = px;
+    y = py;
+    vx = 200.0f;
+    vy = -200.0f;
+}
+
+void Ball::Update(float delta_time) {
+    x += vx * delta_time;
+    y += vy * delta_time;
+    // 壁反射
+    if (x - r < 0) { x = r; vx *= -1; }
+    if (x + r > DXE_WINDOW_WIDTH) { x = DXE_WINDOW_WIDTH - r; vx *= -1; }
+    if (y - r < 0) { y = r; vy *= -1; }
+    // 下方向は消滅など外側で判定
+}
+
+void Ball::Draw() const {
+    DrawCircle(static_cast<int>(x), static_cast<int>(y), static_cast<int>(r), GetColor(255, 255, 255), TRUE);
+}
+
+float Ball::GetX() const { return x; }
+float Ball::GetY() const { return y; }
+float Ball::GetR() const { return r; }
+float Ball::GetVX() const { return vx; }
+float Ball::GetVY() const { return vy; }
+
+void Ball::SetSpeed(float newVx, float newVy) {
+    vx = newVx;
+    vy = newVy;
+}
+
+void Ball::ReflectX() { vx *= -1; }
+void Ball::ReflectY() { vy *= -1; }
