@@ -1,0 +1,10 @@
+#include "TitleScene.h"
+#include "../dxe/dxe.h"
+
+void TitleScene::Update(float delta_time) {
+    if (CheckHitKey(KEY_INPUT_RETURN)) startGame = true;
+}
+void TitleScene::Draw() const {
+    DrawFormatString(320, 220, GetColor(255, 255, 255), "タイトル画面");
+    DrawFormatString(280, 260, GetColor(255, 255, 255), "Enterキーでゲーム開始");
+}
